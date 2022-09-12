@@ -93,6 +93,8 @@ const Register = () => {
         idNumber: Yup.string()
             .required("ID number is required"),
         guardianName: Yup.string()
+            .min(2, "Too Short!")
+            .max(50, "Too Long!")
             .required("Guardian name is required"),
         guardianNumber: Yup.string()
             .required("Guardian number is required")
