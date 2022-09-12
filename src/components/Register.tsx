@@ -7,10 +7,30 @@ import { FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
 
 import Button from '@mui/material/Button';
 
-
+interface User {
+    name: string,
+    age: string,
+    sex: string,
+    number: string,
+    idType: string,
+    idNumber: string,
+    guardianType: string,
+    guardianName: string,
+    email: string,
+    guardianNumber: string,
+    address: string,
+    state: string,
+    city: string,
+    countryName: string,
+    occupation: string,
+    religion: string,
+    maritalStatus: string,
+    bloodGroup: string,
+    nationality: string
+}
 
 const Register = () => {
-    const initialValues = {
+    const initialValues: User = {
         name: "",
         age: "",
         sex: "",
@@ -49,20 +69,56 @@ const Register = () => {
         number: Yup.string()
             .required("Phone number is required")
             .matches(
-                /^(?:(?:\+|00)88|01)?\d{11}$|^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$/g,
+                /^(?:(?:\+|00)88|01)?\d{11}$|^(\+91[-\s]?)?[0]?(91)?[789]\d{9}$/g,
                 "Invalid phone number"
             ),
 
         email: Yup.string().email().required("Email is required"),
-        
 
-            guardianType: Yup.string().when("guardianName", {
-                is: (val: string) => val.length > 0,
-                then: Yup.string().required("Guardian type is required"),
-            }),
-            maritalStatus: Yup.string()
+
+        guardianType: Yup.string().when("guardianName", {
+            is: (val: string) => val.length > 0,
+            then: Yup.string().required("Guardian type is required"),
+        }),
+        maritalStatus: Yup.string()
             .oneOf(['Married', 'Unmarried'])
             .required("Marital status is required"),
+        bloodGroup: Yup.string()
+            .oneOf(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])
+            .required("Blood group is required"),
+
+        idType: Yup.string()
+            .oneOf(['Aadhar', 'Pan', 'Passport', "Birth Certificate", "National ID", 'Driving License'])
+            .required("ID type is required"),
+        idNumber: Yup.string()
+            .required("ID number is required"),
+        guardianName: Yup.string()
+            .required("Guardian name is required"),
+        guardianNumber: Yup.string()
+            .required("Guardian number is required")
+            .matches(
+                /^(?:(?:\+|00)88|01)?\d{11}$|^(\+91[-\s]?)?[0]?(91)?[789]\d{9}$/g,
+                "Invalid number"
+            ),
+        address: Yup.string()
+            .min(5, "Too Short!")
+            .max(200, "Too Long!")
+            .required("Address is required"),
+        state: Yup.string()
+            .oneOf(['Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jammu and Kashmir', 'Jharkhand', 'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal'])
+            .required("State is required"),
+        city: Yup.string()
+            .oneOf(['Agra', 'Ahmedabad', 'Ajmer', 'Aligarh', 'Allahabad', 'Amravati', 'Amritsar', 'Asansol', 'Aurangabad', 'Bareilly', 'Belgaum', 'Bhavnagar', 'Bhiwandi', 'Bhopal', 'Bhubaneswar', 'Bikaner', 'Bokaro Steel City', 'Chandigarh', 'Coimbatore', 'Cuttack', 'Dehradun', 'Dhanbad', 'Bhilai', 'Bhagalpur', 'Bilaspur', 'Bokaro Steel City', 'Chandigarh', 'Coimbatore', 'Cuttack', 'Dehradun', 'Dhanbad', 'Durg-Bhilai Nagar', 'Durgapur', 'Erode', 'Faridabad', 'Firozabad', 'Ghaziabad', 'Gorakhpur', 'Gulbarga', 'Guntur', 'Gwalior', 'Gurgaon', 'Guwahati', 'Hamirpur', 'Hubli-Dharwad', 'Indore', 'Jabalpur', 'Jaipur', 'Jalandhar', 'Jammu', 'Jamnagar', 'Jamshedpur', 'Jhansi', 'Jodhpur', 'Kakinada', 'Kannur', 'Kanpur', 'Kochi', 'Kottayam', 'Kolhapur', 'Kollam', 'Kozhikode', 'Kurnool', 'Ludhiana', 'Lucknow', 'Madurai', 'Malappuram', 'Mathura', 'Goa', 'Gujarat', 'Haryana', 'Himachal Pradesh', 'Jammu and Kashmir', 'Jharkhand', 'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal'])
+            .required("City is required"),
+        countryName: Yup.string()
+            .oneOf(['India'])
+            .required("Country is required"),
+        occupation: Yup.string()
+
+            .required("Occupation is required"),
+        religion: Yup.string()
+            .oneOf(['Hindu', 'Muslim', 'Christian', 'Sikh', 'Buddhist', 'Jain', 'Other'])
+            .required("Religion is required"),
 
 
     });
@@ -116,17 +172,25 @@ const Register = () => {
                     />
                 </Grid>
                 <Grid item xs={4}>
-                    <TextField
-                        required
-                        id="sex"
-                        name="sex"
-                        value={formik.values.sex}
-                        onChange={formik.handleChange}
-                        error={formik.touched.sex && Boolean(formik.errors.sex)}
-                        helperText={formik.touched.sex && formik.errors.sex}
-                        label="Sex"
-                        placeholder="Enter Sex"
-                    />
+                    <FormControl sx={{ m: 1, minWidth: 220 }}>
+                        <InputLabel id="demo-simple-select-helper-label">Sex</InputLabel>
+                        <Select
+                            required
+                            id="sex"
+                            name="sex"
+                            value={formik.values.sex}
+                            onChange={formik.handleChange}
+                            error={formik.touched.sex && Boolean(formik.errors.sex)}
+                            label="Sex"
+                            placeholder="Enter Sex"
+                        >
+                            <MenuItem value={"Male"}>Male</MenuItem>
+                            <MenuItem value={"Female"}>Female</MenuItem>
+                            <MenuItem value={"Common"}>Common</MenuItem>
+                            <MenuItem value={"Other"}>Other</MenuItem>
+                        </Select>
+                    </FormControl>
+
                 </Grid>
 
             </Grid>
@@ -161,6 +225,9 @@ const Register = () => {
                             </MenuItem>
                             <MenuItem value={"National ID"}>National ID</MenuItem>
                             <MenuItem value={"Birth Certificate"}>Birth Certificate</MenuItem>
+                            <MenuItem value={"Passport"}>Passport</MenuItem>
+                            <MenuItem value={"Aadhar"}>Aadhar</MenuItem>
+                            <MenuItem value={"Pan"}>Pan</MenuItem>
                             <MenuItem value={"Other"}>Other</MenuItem>
                         </Select>
                     </FormControl>
@@ -351,10 +418,15 @@ const Register = () => {
                             <MenuItem value="">
                                 <em>None</em>
                             </MenuItem>
-                            <MenuItem value={"Islam"}>Islam</MenuItem>
+                            <MenuItem value={"Muslim"}>Muslim</MenuItem>
                             <MenuItem value={"Hindu"}>Hindu</MenuItem>
-                            <MenuItem value={"Kristin"}>Kristin</MenuItem>
-                            <MenuItem value={"Buddha"}>Buddha</MenuItem>
+                            <MenuItem value={"Christian"}>Christian</MenuItem>
+                            <MenuItem value={"Sikh"}>Sikh</MenuItem>
+                            <MenuItem value={"Buddhist"}>Buddhist</MenuItem>
+                            <MenuItem value={"Jain"}>Jain</MenuItem>
+                            <MenuItem value={"Parsi"}>Parsi</MenuItem>
+                            <MenuItem value={"Jewish"}>Jewish</MenuItem>
+                            <MenuItem value={"Other"}>Other</MenuItem>
                         </Select>
                     </FormControl>
                 </Grid>
@@ -411,9 +483,12 @@ const Register = () => {
                     />
                 </Grid>
             </Grid>
-            <Button color="primary" variant="contained"  type="submit">
-                Submit
-            </Button>
+            <Grid container alignContent="flex-end">
+                <Button color="primary" variant="contained" type="submit">
+                    Submit
+                </Button>
+            </Grid>
+
         </Box>
     );
 };
