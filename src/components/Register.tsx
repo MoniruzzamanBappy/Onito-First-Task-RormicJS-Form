@@ -7,6 +7,8 @@ import { FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
 
 import Button from '@mui/material/Button';
 
+
+
 const Register = () => {
     const initialValues = {
         name: "",
@@ -52,16 +54,15 @@ const Register = () => {
             ),
 
         email: Yup.string().email().required("Email is required"),
-
-        guardianName: Yup.string()
-            .min(3, "Too Short!")
-            .max(50, "Too Long!")
-            .required("Guardian name is required"),
+        
 
             guardianType: Yup.string().when("guardianName", {
                 is: (val: string) => val.length > 0,
                 then: Yup.string().required("Guardian type is required"),
             }),
+            maritalStatus: Yup.string()
+            .oneOf(['Married', 'Unmarried'])
+            .required("Marital status is required"),
 
 
     });
