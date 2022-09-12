@@ -44,18 +44,21 @@ const Register = () => {
             .max(10, "Too Long!")
             .required("sex is required"),
 
-        // number: Yup.string()
-        //     .required("Phone number is required")
-        //     .matches(
-        //         /^([0]{1}|\+?[234]{3})([7-9]{1})([0|1]{1})([\d]{1})([\d]{7})$/g,
-        //         "Invalid phone number"
-        //     ),
+        number: Yup.string()
+            .required("Phone number is required")
+            .matches(
+                /^(?:(?:\+|00)88|01)?\d{11}$|^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$/g,
+                "Invalid phone number"
+            ),
 
-        // email: Yup.string().email().required("Email is required"),
+        email: Yup.string().email().required("Email is required"),
 
-        // password: Yup.string()
-        //     .required("Password is required")
-        //     .min(6, "Password is too short - should be 6 chars minimum"),
+
+        //     guardianName: Yup.string().when("guardianType", {
+        //     is: (val) => val !== "",
+        //     then: Yup.string().required("Guardian name is required"),
+
+
     });
 
     const formik = useFormik({
@@ -402,7 +405,7 @@ const Register = () => {
                     />
                 </Grid>
             </Grid>
-            <Button color="primary" variant="contained" fullWidth type="submit">
+            <Button color="primary" variant="contained"  type="submit">
                 Submit
             </Button>
         </Box>
