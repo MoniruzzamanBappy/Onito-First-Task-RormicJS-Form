@@ -3,9 +3,9 @@ import * as Yup from "yup";
 import React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import { FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
-
-import Button from '@mui/material/Button';
+import { Alert, FormControl, Grid, InputLabel, MenuItem, Select, Stack } from "@mui/material";
+import PersonalDetails from './PersonalDetails';
+import Typography  from '@mui/material/Typography';
 
 interface User {
     name: string,
@@ -75,7 +75,6 @@ const Register = () => {
 
         email: Yup.string().email().required("Email is required"),
 
-
         guardianType: Yup.string().when("guardianName", {
             is: (val: string) => val.length > 0,
             then: Yup.string().required("Guardian type is required"),
@@ -116,7 +115,6 @@ const Register = () => {
             .oneOf(['India'])
             .required("Country is required"),
         occupation: Yup.string()
-
             .required("Occupation is required"),
         religion: Yup.string()
             .oneOf(['Hindu', 'Muslim', 'Christian', 'Sikh', 'Buddhist', 'Jain', 'Other'])
@@ -143,112 +141,8 @@ const Register = () => {
             }}
             autoComplete="off"
         >
-            <p>Personal Details</p>
-            <Grid container spacing={2} >
-                <Grid item xs={4}>
-                    <TextField
-                        required
-                        id="name"
-                        name="name"
-                        value={formik.values.name}
-                        onChange={formik.handleChange}
-                        error={formik.touched.name && Boolean(formik.errors.name)}
-                        helperText={formik.touched.name && formik.errors.name}
-                        label="Enter Name"
-                        placeholder="Enter Name"
-                    />
-                </Grid>
-                <Grid item xs={4}>
-
-                    <TextField
-                        required
-                        id="age"
-                        name="age"
-                        type="number"
-                        value={formik.values.age}
-                        onChange={formik.handleChange}
-                        error={formik.touched.age && Boolean(formik.errors.age)}
-                        helperText={formik.touched.age && formik.errors.age}
-                        label="Date Of Birth or Age"
-                        placeholder="Enter Date Of Birth or Age"
-                    />
-                </Grid>
-                <Grid item xs={4}>
-                    <FormControl sx={{ m: 1, minWidth: 220 }}>
-                        <InputLabel id="demo-simple-select-helper-label">Sex</InputLabel>
-                        <Select
-                            required
-                            id="sex"
-                            name="sex"
-                            value={formik.values.sex}
-                            onChange={formik.handleChange}
-                            error={formik.touched.sex && Boolean(formik.errors.sex)}
-                            label="Sex"
-                            placeholder="Enter Sex"
-                        >
-                            <MenuItem value={"Male"}>Male</MenuItem>
-                            <MenuItem value={"Female"}>Female</MenuItem>
-                            <MenuItem value={"Common"}>Common</MenuItem>
-                            <MenuItem value={"Other"}>Other</MenuItem>
-                        </Select>
-                    </FormControl>
-
-                </Grid>
-
-            </Grid>
-            <Grid container spacing={2} >
-                <Grid item xs={4}>
-                    <TextField
-                        id="number"
-                        name="number"
-                        value={formik.values.number}
-                        onChange={formik.handleChange}
-                        error={formik.touched.number && Boolean(formik.errors.number)}
-                        helperText={formik.touched.number && formik.errors.number}
-                        label="Mobile Number"
-                        placeholder="Enter Mobile Number"
-                    />
-
-                </Grid>
-                <Grid item xs={8}>
-
-                    <FormControl sx={{ m: 1, minWidth: 220 }}>
-                        <InputLabel id="demo-simple-select-helper-label">ID Type</InputLabel>
-                        <Select
-                            id="idType"
-                            name="idType"
-                            value={formik.values.idType}
-                            onChange={formik.handleChange}
-                            error={formik.touched.idType && Boolean(formik.errors.idType)}
-                            label="ID Type"
-                        >
-                            <MenuItem value="">
-                                <em>None</em>
-                            </MenuItem>
-                            <MenuItem value={"National ID"}>National ID</MenuItem>
-                            <MenuItem value={"Birth Certificate"}>Birth Certificate</MenuItem>
-                            <MenuItem value={"Passport"}>Passport</MenuItem>
-                            <MenuItem value={"Aadhar"}>Aadhar</MenuItem>
-                            <MenuItem value={"Pan"}>Pan</MenuItem>
-                            <MenuItem value={"Other"}>Other</MenuItem>
-                        </Select>
-                    </FormControl>
-
-                    <TextField
-                        id="idNumber"
-                        name="idNumber"
-                        value={formik.values.idNumber}
-                        onChange={formik.handleChange}
-                        error={formik.touched.idNumber && Boolean(formik.errors.idNumber)}
-                        helperText={formik.touched.idNumber && formik.errors.idNumber}
-                        label="ID Number"
-                        placeholder="Enter ID Number"
-                    />
-
-                </Grid>
-
-            </Grid>
-            <p>Contact Details</p>
+            <PersonalDetails formik={formik}/>
+            <Typography variant="h6" sx={{ textDecoration: 'underline'}} >Contact Details</Typography>
             <Grid container spacing={2} >
                 <Grid item xs={4}>
                     <FormControl sx={{ m: 1, minWidth: 220 }}>
@@ -308,7 +202,7 @@ const Register = () => {
                     />
                 </Grid>
             </Grid>
-            <p>Address Details</p>
+            <Typography variant="h6" sx={{ textDecoration: 'underline'}} >Address Details</Typography>
             <Grid container spacing={2} >
                 <Grid item xs={4}>
 
@@ -390,7 +284,7 @@ const Register = () => {
                     />
                 </Grid>
             </Grid>
-            <p>Other Details</p>
+            <Typography variant="h6" sx={{ textDecoration: 'underline'}} >Other Details</Typography>
             <Grid container spacing={2} >
                 <Grid item xs={3}>
                     <TextField
@@ -486,9 +380,39 @@ const Register = () => {
                 </Grid>
             </Grid>
             <Grid container alignContent="flex-end">
-                <Button color="primary" variant="contained" type="submit">
-                    Submit
-                </Button>
+
+                <Stack sx={{ width: '50%', margin: 'auto', }} spacing={2}  >
+                    {
+                        formik.errors.name && <div style={{ display: 'flex', justifyContent: 'center' }}>
+                            <Alert sx={{ width: '100%' }} onClose={() => { }} severity="error">{formik.errors.name}</Alert>
+                        </div>
+                    }
+                    {
+                        formik.errors.age && <div style={{ display: 'flex', justifyContent: 'center' }}>
+                            <Alert sx={{ width: '100%' }} onClose={() => { }} severity="error">{formik.errors.age}</Alert>
+                        </div>
+                    }
+                    {
+                        formik.errors.sex && <div style={{ display: 'flex', justifyContent: 'center' }}>
+                            <Alert sx={{ width: '100%' }} onClose={() => { }} severity="error">{formik.errors.sex}</Alert>
+                        </div>
+                    }
+                    {
+                        formik.errors.email && <div style={{ display: 'flex', justifyContent: 'center' }}>
+                            <Alert sx={{ width: '100%' }} onClose={() => { }} severity="error">{formik.errors.email}</Alert>
+                        </div>
+                    }
+                    {
+                        formik.errors.guardianType && <div style={{ display: 'flex', justifyContent: 'center' }}>
+                            <Alert sx={{ width: '100%' }} onClose={() => { }} severity="error">{formik.errors.guardianType}</Alert>
+                        </div>
+                    }
+                </Stack>
+
+                <div className='buttons-container'>
+                    <button style={{marginRight: "10px"}} type='button' className='cancelButton' >CANCEL <br /> <span>(ESC)</span></button>
+                    <button type="submit" className='submitButton' value='SUBMIT'>SUBMIT <br /> <span>(% S)</span></button>
+                </div>
             </Grid>
 
         </Box>
